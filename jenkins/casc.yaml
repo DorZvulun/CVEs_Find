@@ -1,6 +1,6 @@
 unclassified:
   location:
-    url: http://server_ip:8080/
+    url: http://jenkins.local:8080/
 jenkins:
   securityRealm:
     local:
