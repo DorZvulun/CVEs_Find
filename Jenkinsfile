@@ -46,10 +46,14 @@ pipeline{
 
     post{
         success {
-            
+            script{
+                echo "success"
+            }
         }
         failure{
-
+            script{
+                echo "failure"
+            }
         }
         always{
             cleanWs()
