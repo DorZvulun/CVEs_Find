@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  jenkins_ci_server:
+    build:
+      context: .
+      dockerfile: jenkins.Dockerfile
+    image: jenkins_ci_protfolio
+    container_name: jenkins_ci_protfolio
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    expose:
+      - 22
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - ci_network
+      - ci_bridge
+
+volumes:
+  jenkins_home:
+
+networks:
+  ci_network:
+  ci_bridge:
+    external:
+      name: ci_bridge
+
+# for gitlab admin pass do: sudo docker exec -it <container_name> grep 'Password:' /etc/gitlab/initial_root_password
+# login as admin - user = root, pass from ^^^
+# 7ipoB/pD8LJyblGZwR2cx5tt3jqzYVIW8MBCQt0LnbE=
+
+
+# users passwords for this project
+# dev:
+# jenkins: dor 13578642
+# gitlab: root 13578642, jenkins 13578642, (dev) dor password
+# artifactory: admin, password | repo key: artifactorykey | user: jenkins Jj13578642
+#
