@@ -1,7 +1,10 @@
-def branchName=""
-def filename=""
+def timestamp=$(date +%d_%m_%Y)
+def branchName="cve_${timestamp}"
+def filename="CVE-${timestamp}.csv"
 def repo_url="https://github.com/DorZvulun/CVEs_Find_LOG.git"
-def GH_TOKEN="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"
+
+def 
+
 pipeline{
     agent any
     options{
@@ -16,25 +19,91 @@ pipeline{
 
     stages{
 
-        stage('PR_fence'){
-            steps{
-                sh """
-                git clone https://github.com/DorZvulun/CVEs_Find_LOG.git
-                cd CVEs_Find_LOG
-                gh pr view ${branchName}
+        // stage('PR_fence'){
+        //     when{
+        //         sh """
+        //             git clone ${repo_url}
+        //             cd CVEs_Find_LOG
+        //             pr_list=$(gh pr list)
+        //             if [[ "${pr_list}" == *"${no open pull requests}"* ]]
+        //                 then
+        //                     exit 0
+        //             fi 
 
-                """
-            }
-        }
+        //             """
+        //     }
+        //     steps{
+        //         script{
+        //             echo "~~~~~ Checking if PR exists ~~~~~"
+                    
+        //         }
+                
+        //     }
+        // }
 
         stage('Run_Script'){
             steps{
                 script{
-                    echo "~~~~~~~"
-                    sshagent([''])
-                        sh """
+                    echo "~~~~~~~ running check vulnerabilities script ~~~~~~"
+                    sh """
 
-                        """
+                    download() {
+                        wget -qO- https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-modified.json.zip | bsdtar -xvf-
+                    }
+
+                    delete() {
+                        rm -f $filename
+                    }
+
+                    checkVulnerability() {
+                        if [ -f "./nvdcve-1.1-modified.json" ]; then
+                            {
+                                echo -e 'ID, Description, Publish Date\n'
+                                cat nvdcve-1.1-modified.json | jq -c -r '.CVE_Items[] | select(.cve.description.description_data[0].value | test(".*(Jenkins|Kubernetes).*")) | [.cve.CVE_data_meta.ID, .cve.description.description_data[0].value, .publishedDate] | @csv'
+                            } >${filename}
+                        else
+                            echo "Problem with streamfile"
+                        fi
+                    }
+
+                    vulnerable() {
+
+                        if [ -f "./${filename}" ]; then
+                            if [ -s "./${filename}" ]; then
+                                return 1
+                            else
+                                echo "File is empty"
+                                return 0
+                            fi
+                        else
+                            echo "File not exists"
+                            return 0
+                        fi
+                    }
+
+                    logCVE() {
+                        if ${vul}; then
+                            echo "vul is true"
+                        fi
+                    }
+                    main() {
+                        delete
+                        download
+                        checkVulnerability
+                        vulnerable
+                        logCVE
+
+                        if vulnerable; then
+                            git checkout -b ${branchName}
+                            git add ${filename}
+                            git commit -m "New vulnerabilities list ${filename}"
+                            git push --set-upstream origin ${branchName}
+                            gh pr create --title "New vulnerabilities list ${branchName} ${timestamp}" --body "Check new vulnerabilities ${timestamp}" https://github.com/DorZvulun/CVEs_Find_LOG.git -B main
+                        fi
+                    }
+                    main
+                    
+                    """
                 }
 
                 
