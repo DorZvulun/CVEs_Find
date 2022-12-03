@@ -17,27 +17,22 @@ pipeline{
 
     stages{
 
-        // stage('PR_fence'){
-        //     when{
-        //         sh """
-        //             git clone ${repo_url}
-        //             cd CVEs_Find_LOG
-        //             pr_list=$(gh pr list)
-        //             if [[ "${pr_list}" == *"${no open pull requests}"* ]]
-        //                 then
-        //                     exit 0
-        //             fi 
-
-        //             """
-        //     }
-        //     steps{
-        //         script{
-        //             echo "~~~~~ Checking if PR exists ~~~~~"
+        stage('PR_fence'){
+            
+            }
+            steps{
+                script{
+                    echo "~~~~~ Checking if PR exists ~~~~~"
+                    sh """
+                    git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
+                    cd CVEs_Find_LOG
+                    gh pr list
+                    """
                     
-        //         }
+                }
                 
-        //     }
-        // }
+            }
+        }
 
         stage('Run_Script'){
             steps{
@@ -54,7 +49,7 @@ pipeline{
                     }
 
                     checkVulnerability() {
-                        git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
+                        #git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
                         
                         if [ -f "./nvdcve-1.1-modified.json" ]; then
                             {
