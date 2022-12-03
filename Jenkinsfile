@@ -97,7 +97,7 @@ pipeline{
                         vulnerable
                         logCVE
 
-                        ${index}=${index}+1
+                        
 
                         
                     }
