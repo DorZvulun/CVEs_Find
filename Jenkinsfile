@@ -94,11 +94,6 @@ pipeline{
                         download
                         checkVulnerability
                         vulnerable
-                        logCVE
-
-                        
-
-                        
                     }
                     main
 
