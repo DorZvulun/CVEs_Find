@@ -9,7 +9,7 @@ pipeline{
         timestamps()
         timeout(time:14, unit: 'MINUTES')
         buildDiscarder(logRotator(
-            numToKeepStr: '1',
+            numToKeepStr: '4',
             daysToKeepStr: '1',
             artifactNumToKeepStr: '0'
         ))
@@ -24,7 +24,7 @@ pipeline{
                     sh """
                         git clone git@github.com:dorzvulun/CVEs_Find_Log.git
                         cd CVEs_Find_Log
-                        if ! [[ $(gh pr list) == *"no open pull requests"* ]]
+                        if [[ $(gh pr list) == *"no open pull requests"* ]]
                             then
                                 echo "~~~~~ no pull requests ~~~~~~"
                                 exit 0
