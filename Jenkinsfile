@@ -68,6 +68,8 @@ pipeline{
 
                         if [ -f "./${filename}" ]; then
                             if [ -s "./${filename}" ]; then
+                                git config user.email ${GIT_COMMITER_EMAIL}
+                                git config user.name ${GIT_COMMITER_NAME}
                                 git checkout -b ${branchName}
                                 git add ${filename}
                                 git commit -m "New vulnerabilities list ${filename}"
