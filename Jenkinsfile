@@ -24,7 +24,11 @@ pipeline{
                     sh """
                         git clone git@github.com:dorzvulun/CVEs_Find_Log.git
                         cd CVEs_Find_Log
-                        echo $PWD
+                        if ! [[ $(gh pr list) == *"no open pull requests"* ]]
+                            then
+                                echo "~~~~~ no pull requests ~~~~~~"
+                                exit 0
+                        fi
                     """
                     // sh """
                     //     git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
@@ -44,9 +48,7 @@ pipeline{
         stage('Run_Script'){
             steps{
                 script{
-                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-                    echo "~~~~~~~ running check vulnerabilities script ~~~~~~"
-                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~ running check vulnerabilities script ~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                     sh """
 
                     download() {
