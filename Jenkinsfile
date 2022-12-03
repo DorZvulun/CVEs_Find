@@ -98,11 +98,6 @@ pipeline{
                             download
                             checkVulnerability
                             vulnerable
-                            logCVE
-
-                            ${index}=${index}+1
-
-                            
                         }
                         main
 
