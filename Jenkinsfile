@@ -9,107 +9,95 @@ pipeline{
         timestamps()
         timeout(time:14, unit: 'MINUTES')
         buildDiscarder(logRotator(
-            numToKeepStr: '4',
-            daysToKeepStr: '1',
+            numToKeepStr: '0',
+            daysToKeepStr: '0',
             artifactNumToKeepStr: '0'
         ))
     }
 
     stages{
 
-        stage('PR_fence'){
-            steps{
-                script{
-                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~ Checking if PR exists ~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-                    withCredentials([sshUserPrivateKey(credentialsId: 'ceb8ef64-63bc-4918-8c7f-a34193776425')]) {
-                        sh """
-                            git clone git@github.com:dorzvulun/cves_find_log.git
-                            cd cves_find_log
-                            echo $PWD
-                            #gh pr list
-                        """
-                    }
+        // stage('PR_fence'){
+        //     when{
+        //         sh """
+        //             git clone ${repo_url}
+        //             cd CVEs_Find_LOG
+        //             pr_list=$(gh pr list)
+        //             if [[ "${pr_list}" == *"${no open pull requests}"* ]]
+        //                 then
+        //                     exit 0
+        //             fi 
+
+        //             """
+        //     }
+        //     steps{
+        //         script{
+        //             echo "~~~~~ Checking if PR exists ~~~~~"
                     
-                    //
-                        // sh """
-                        //     gh pr list
-                        // """
-                        // sh """
-                        //     git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
-                        //     cd CVEs_Find_LOG
-                        //     if ! [[ $(gh pr list) == *"no open pull requests"* ]]
-                        //         then
-                        //             echo "~~~~~~ no pull requests ~~~~~~"
-                        //             exit 0
-                        //     fi 
-                        // """
-                    //}
-                }
+        //         }
                 
-            }
-        }
+        //     }
+        // }
 
         stage('Run_Script'){
             steps{
                 script{
                     echo "~~~~~~~ running check vulnerabilities script ~~~~~~"
-                    withCredentials([sshUserPrivateKey(credentialsId: 'ceb8ef64-63bc-4918-8c7f-a34193776425')]) {
-                        sh """
+                    sh """
 
-                        download() {
-                            wget -qO- https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-modified.json.zip | bsdtar -xvf-
-                        }
+                    download() {
+                        wget -qO- https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-modified.json.zip | bsdtar -xvf-
+                    }
 
-                        delete() {
-                            rm -f ${filename}
-                        }
+                    delete() {
+                        rm -f ${filename}
+                    }
 
-                        checkVulnerability() {
-                            git clone ${repo_url}
-                            
-                            if [ -f "./nvdcve-1.1-modified.json" ]; then
-                                {
-                                    echo -e 'ID, Description, Publish Date\n'
-                                    cat nvdcve-1.1-modified.json | jq -c -r '.CVE_Items[] | select(.cve.description.description_data[0].value | test(".*(Jenkins|Kubernetes).*")) | [.cve.CVE_data_meta.ID, .cve.description.description_data[0].value, .publishedDate] | @csv'
-                                } >./cves_find_log/${filename}
+                    checkVulnerability() {
+                        git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
+                        
+                        if [ -f "./nvdcve-1.1-modified.json" ]; then
+                            {
+                                echo -e 'ID, Description, Publish Date\n'
+                                cat nvdcve-1.1-modified.json | jq -c -r '.CVE_Items[] | select(.cve.description.description_data[0].value | test(".*(Jenkins|Kubernetes).*")) | [.cve.CVE_data_meta.ID, .cve.description.description_data[0].value, .publishedDate] | @csv'
+                            } >./CVEs_Find_LOG/${filename}
+                        else
+                            echo "Problem with streamfile"
+                        fi
+                        cd CVEs_Find_LOG
+                    }
+
+                    vulnerable() {
+
+                        if [ -f "./${filename}" ]; then
+                            if [ -s "./${filename}" ]; then
+                                git config user.name ${env.GIT_COMMITER_NAME}
+                                git config user.email ${env.GIT_COMMITER_EMAIL}
+                                git checkout -b ${branchName}
+                                git add ${filename}
+                                git commit -m "New vulnerabilities list ${filename}"
+                                git push --set-upstream origin ${branchName}
+                                gh pr create --title "New vulnerabilities list ${branchName}" --body "Check new vulnerabilities ${timestamp}" -B main
                             else
-                                echo "Problem with streamfile"
-                            fi
-                            cd cves_find_log
-                        }
-
-                        vulnerable() {
-
-                            if [ -f "./${filename}" ]; then
-                                if [ -s "./${filename}" ]; then
-                                    git config user.name ${env.GIT_COMMITER_NAME}
-                                    git config user.email ${env.GIT_COMMITER_EMAIL}
-                                    git checkout -b ${branchName}
-                                    git add ${filename}
-                                    git commit -m "New vulnerabilities list ${filename}"
-                                    git push --set-upstream origin ${branchName}
-                                    gh pr create --fill ${repo_url} -B main
-                                else
-                                    echo "File is empty"
-                                    return 0
-                                fi
-                            else
-                                echo "File not exists"
+                                echo "File is empty"
                                 return 0
                             fi
-                        }
-
-                        
-                        main() {
-                            #delete
-                            download
-                            checkVulnerability
-                            vulnerable
-                        }
-                        main
-
-                        """
+                        else
+                            echo "File not exists"
+                            return 0
+                        fi
                     }
+
+                    
+                    main() {
+                        delete
+                        download
+                        checkVulnerability
+                        vulnerable
+                    }
+                    main
+
+                    """
                 }
 
                 
