@@ -1,4 +1,4 @@
-def timestamp=$(date +%d_%m_%Y)
+def timestamp=new Date().format(dd_mm_yyy)
 def branchName="cve_${timestamp}"
 def filename="CVE-${timestamp}.csv"
 def repo_url="https://github.com/DorZvulun/CVEs_Find_LOG.git"
@@ -102,7 +102,7 @@ pipeline{
                         fi
                     }
                     main
-                    
+
                     """
                 }
 
