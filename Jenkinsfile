@@ -91,13 +91,7 @@ pipeline{
                         vulnerable
                         logCVE
 
-                        // if vulnerable; then
-                        //     git checkout -b ${branchName}
-                        //     git add ${filename}
-                        //     git commit -m "New vulnerabilities list ${filename}"
-                        //     git push --set-upstream origin ${branchName}
-                        //     gh pr create --title "New vulnerabilities list ${branchName} ${timestamp}" --body "Check new vulnerabilities ${timestamp}" https://github.com/DorZvulun/CVEs_Find_LOG.git -B main
-                        // fi
+                        
                     }
                     main
 
