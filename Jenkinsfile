@@ -20,7 +20,12 @@ pipeline{
         stage('PR_fence'){
             steps{
                 script{
+                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                     echo "~~~~~ Checking if PR exists ~~~~~"
+                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                    sh """
+                        echo "HELLO WORLD"
+                    """
                     // sh """
                     //     git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
                     //     cd CVEs_Find_LOG
@@ -39,7 +44,9 @@ pipeline{
         stage('Run_Script'){
             steps{
                 script{
+                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                     echo "~~~~~~~ running check vulnerabilities script ~~~~~~"
+                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                     sh """
 
                     download() {
