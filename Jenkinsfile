@@ -21,11 +21,11 @@ pipeline{
             steps{
                 script{
                     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~ Checking if PR exists ~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-                    //withCredentials([sshUserPrivateKey(credentialsId: 'ceb8ef64-63bc-4918-8c7f-a34193776425')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ceb8ef64-63bc-4918-8c7f-a34193776425')]) {
                         sh """
                             git clone git@github.com:dorzvulun/CVEs_Find_Log.git
                             cd CVEs_Find_Log
-                            #gh pr list
+                            gh pr list
                         """
                         // sh """
                         //     git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
@@ -36,7 +36,7 @@ pipeline{
                         //             exit 0
                         //     fi 
                         // """
-                    //}
+                    }
                 }
                 
             }
