@@ -25,7 +25,7 @@ pipeline{
                     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                     sh """
                         git clone git@github.com:dorzvulun/CVEs_Find_Log.git
-                        cd CVEs_Find_LOG
+                        cd CVEs_Find_Log
                         echo $PWD
                     """
                     // sh """
