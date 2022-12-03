@@ -5,9 +5,10 @@ RUN apt update && apt install -y gh
 #RUN usermod -aG docker jenkins
 
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
+ENV GITHUB_TOKEN ${GITHUB_TOKEN}
 
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 
 RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt
 
-#USER jenkins
+USER jenkins
