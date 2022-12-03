@@ -51,7 +51,7 @@ pipeline{
             steps{
                 script{
                     echo "~~~~~~~ running check vulnerabilities script ~~~~~~"
-                    //withCredentials([sshUserPrivateKey(credentialsId: 'ceb8ef64-63bc-4918-8c7f-a34193776425')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ceb8ef64-63bc-4918-8c7f-a34193776425')]) {
                         sh """
 
                         download() {
@@ -107,7 +107,7 @@ pipeline{
                         main
 
                         """
-                    //}
+                    }
                 }
 
                 
