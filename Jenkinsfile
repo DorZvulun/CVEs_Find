@@ -24,11 +24,7 @@ pipeline{
                     sh """
                         git clone git@github.com:dorzvulun/CVEs_Find_Log.git
                         cd CVEs_Find_Log
-                        if [[ $(gh pr list) == *"no open pull requests"* ]]
-                            then
-                                echo "~~~~~ no pull requests ~~~~~~"
-                                exit 0
-                        fi
+                        gh pr list
                     """
                     // sh """
                     //     git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
