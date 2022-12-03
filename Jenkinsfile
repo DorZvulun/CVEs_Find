@@ -78,7 +78,6 @@ pipeline{
                                 git commit -m "New vulnerabilities list ${filename}"
                                 git push --set-upstream origin ${branchName}
                                 gh pr create --title "New vulnerabilities list ${branchName}" --body "Check new vulnerabilities ${timestamp}" -B main
-                                gh pr create --fill -B main
                             else
                                 echo "File is empty"
                                 return 0
