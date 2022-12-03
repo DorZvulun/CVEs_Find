@@ -19,3 +19,4 @@ timestamper:latest
 workflow-aggregator:latest
 ws-cleanup:latest
 authorize-project:latest
+dark-theme:latest
