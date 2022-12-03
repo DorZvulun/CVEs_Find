@@ -68,13 +68,15 @@ pipeline{
 
                         if [ -f "./${filename}" ]; then
                             if [ -s "./${filename}" ]; then
+                                git clone ${repo_url}
+                                cd CVEs_Find_LOG
                                 git config user.name ${env.GIT_COMMITER_NAME}
                                 git config user.email ${env.GIT_COMMITER_EMAIL}
                                 git checkout -b ${branchName}
                                 git add ${filename}
                                 git commit -m "New vulnerabilities list ${filename}"
                                 git push --set-upstream origin ${branchName}
-                                gh pr create --fill "https://github.com/DorZvulun/CVEs_Find_LOG.git" -B main
+                                gh pr create --fill ${repo_url} -B main
                             else
                                 echo "File is empty"
                                 return 0
