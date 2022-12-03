@@ -19,12 +19,10 @@ pipeline{
             steps{
                 sh """
                 git clone https://github.com/DorZvulun/CVEs_Find_LOG.git
-                pushd CVEs_Find_LOG
+                cd CVEs_Find_LOG
                 gh pr view ${branchName}
 
                 """
-                
-
             }
         }
 
