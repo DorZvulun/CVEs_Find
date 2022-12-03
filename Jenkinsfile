@@ -17,27 +17,25 @@ pipeline{
 
     stages{
 
-        // stage('PR_fence'){
-        //     when{
-        //         sh """
-        //             git clone ${repo_url}
-        //             cd CVEs_Find_LOG
-        //             pr_list=$(gh pr list)
-        //             if [[ "${pr_list}" == *"${no open pull requests}"* ]]
-        //                 then
-        //                     exit 0
-        //             fi 
+        stage('PR_fence'){
+            steps{
+                script{
+                    echo "~~~~~ Checking if PR exists ~~~~~"
+                    sh """
+                        git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
+                        cd CVEs_Find_LOG
+                        if ! [[ $(gh pr list) == *"${no open pull requests}"* ]]
+                            then
+                                echo "~~~~~~ no pull requests ~~~~~~"
+                                exit 0
+                        fi 
 
-        //             """
-        //     }
-        //     steps{
-        //         script{
-        //             echo "~~~~~ Checking if PR exists ~~~~~"
+                    """
                     
-        //         }
+                }
                 
-        //     }
-        // }
+            }
+        }
 
         stage('Run_Script'){
             steps{
@@ -54,17 +52,16 @@ pipeline{
                     }
 
                     checkVulnerability() {
-                        git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
+                        
                         
                         if [ -f "./nvdcve-1.1-modified.json" ]; then
                             {
                                 echo -e 'ID, Description, Publish Date\n'
                                 cat nvdcve-1.1-modified.json | jq -c -r '.CVE_Items[] | select(.cve.description.description_data[0].value | test(".*(Jenkins|Kubernetes).*")) | [.cve.CVE_data_meta.ID, .cve.description.description_data[0].value, .publishedDate] | @csv'
-                            } >./CVEs_Find_LOG/${filename}
+                            } >${filename}
                         else
                             echo "Problem with streamfile"
                         fi
-                        cd CVEs_Find_LOG
                     }
 
                     vulnerable() {
