@@ -23,7 +23,7 @@ pipeline{
                     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~ Checking if PR exists ~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                     sh """
                         git clone git@github.com:dorzvulun/cves_find_log.git
-                        cd cves_find_log
+                        pushd cves_find_log
                         echo $PWD
                         gh pr list
                     """
