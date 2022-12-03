@@ -24,10 +24,7 @@ pipeline{
                     sh """
                     git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
                     cd CVEs_Find_LOG
-                    if [[ $(gh pr list) == "no open pull requests in DorZvulun/CVEs_Find_LOG" ]]
-                    then
-                        echo "no open pull requests"
-                    fi
+                    
                     
                     """
                 }
