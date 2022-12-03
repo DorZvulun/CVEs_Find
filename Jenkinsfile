@@ -78,7 +78,7 @@ pipeline{
                                 git add ${filename}
                                 git commit -m "New vulnerabilities list ${filename}"
                                 git push --set-upstream origin ${branchName}
-                                gh pr create --fill ${repo_url} -B main
+                                gh pr create --fill -B main
                             else
                                 echo "File is empty"
                                 return 0
