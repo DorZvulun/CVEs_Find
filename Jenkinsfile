@@ -69,11 +69,11 @@ pipeline{
                                 {
                                     echo -e 'ID, Description, Publish Date\n'
                                     cat nvdcve-1.1-modified.json | jq -c -r '.CVE_Items[] | select(.cve.description.description_data[0].value | test(".*(Jenkins|Kubernetes).*")) | [.cve.CVE_data_meta.ID, .cve.description.description_data[0].value, .publishedDate] | @csv'
-                                } >./CVEs_Find_LOG/${filename}
+                                } >./cves_find_log/${filename}
                             else
                                 echo "Problem with streamfile"
                             fi
-                            cd CVEs_Find_LOG
+                            cd cves_find_log
                         }
 
                         vulnerable() {
