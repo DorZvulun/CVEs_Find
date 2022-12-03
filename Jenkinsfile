@@ -54,6 +54,8 @@ pipeline{
                     }
 
                     checkVulnerability() {
+                        git clone ${repo_url}
+                        cd CVEs_Find_LOG
                         if [ -f "./nvdcve-1.1-modified.json" ]; then
                             {
                                 echo -e 'ID, Description, Publish Date\n'
@@ -68,8 +70,6 @@ pipeline{
 
                         if [ -f "./${filename}" ]; then
                             if [ -s "./${filename}" ]; then
-                                git clone ${repo_url}
-                                cd CVEs_Find_LOG
                                 git config user.name ${env.GIT_COMMITER_NAME}
                                 git config user.email ${env.GIT_COMMITER_EMAIL}
                                 git checkout -b ${branchName}
