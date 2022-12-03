@@ -18,8 +18,6 @@ pipeline{
     stages{
 
         stage('PR_fence'){
-            
-            }
             steps{
                 script{
                     echo "~~~~~ Checking if PR exists ~~~~~"
@@ -28,9 +26,7 @@ pipeline{
                     cd CVEs_Find_LOG
                     gh pr list
                     """
-                    
                 }
-                
             }
         }
 
