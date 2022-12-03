@@ -50,7 +50,7 @@ pipeline{
                     }
 
                     delete() {
-                        rm -f $filename
+                        rm -f ${filename}
                     }
 
                     checkVulnerability() {
@@ -79,11 +79,7 @@ pipeline{
                         fi
                     }
 
-                    logCVE() {
-                        if ${vul}; then
-                            echo "vul is true"
-                        fi
-                    }
+                    
                     main() {
                         delete
                         download
