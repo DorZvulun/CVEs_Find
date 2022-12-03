@@ -55,7 +55,7 @@ pipeline{
                     }
 
                     checkVulnerability() {
-                        git clone ${repo_url}
+                        git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
                         
                         if [ -f "./nvdcve-1.1-modified.json" ]; then
                             {
