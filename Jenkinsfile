@@ -44,61 +44,70 @@ pipeline{
         stage('Run_Script'){
             steps{
                 script{
-                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~ running check vulnerabilities script ~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-                    sh """
 
-                    download() {
-                        wget -qO- https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-modified.json.zip | bsdtar -xvf-
-                    }
+                    echo "~~~~~~~ running check vulnerabilities script ~~~~~~"
+                    withCredentials([sshUserPrivateKey(credentialsId: 'afe69f57-cb5a-461a-afe3-46e83465d987')]) {
+                        sh """
 
-                    delete() {
-                        rm -f ${filename}
-                    }
+                        download() {
+                            wget -qO- https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-modified.json.zip | bsdtar -xvf-
+                        }
 
-                    checkVulnerability() {
-                        
-                        
-                        if [ -f "./nvdcve-1.1-modified.json" ]; then
-                            {
-                                echo -e 'ID, Description, Publish Date\n'
-                                cat nvdcve-1.1-modified.json | jq -c -r '.CVE_Items[] | select(.cve.description.description_data[0].value | test(".*(Jenkins|Kubernetes).*")) | [.cve.CVE_data_meta.ID, .cve.description.description_data[0].value, .publishedDate] | @csv'
-                            } >${filename}
-                        else
-                            echo "Problem with streamfile"
-                        fi
-                    }
+                        delete() {
+                            rm -f ${filename}
+                        }
 
-                    vulnerable() {
-
-                        if [ -f "./${filename}" ]; then
-                            if [ -s "./${filename}" ]; then
-                                git config user.name ${env.GIT_COMMITER_NAME}
-                                git config user.email ${env.GIT_COMMITER_EMAIL}
-                                git checkout -b ${branchName}
-                                git add ${filename}
-                                git commit -m "New vulnerabilities list ${filename}"
-                                git push --set-upstream origin ${branchName}
-                                gh pr create --title "New vulnerabilities list ${branchName}" --body "Check new vulnerabilities ${timestamp}" -B main
+                        checkVulnerability() {
+                            git clone ${repo_url}
+                            
+                            if [ -f "./nvdcve-1.1-modified.json" ]; then
+                                {
+                                    echo -e 'ID, Description, Publish Date\n'
+                                    cat nvdcve-1.1-modified.json | jq -c -r '.CVE_Items[] | select(.cve.description.description_data[0].value | test(".*(Jenkins|Kubernetes).*")) | [.cve.CVE_data_meta.ID, .cve.description.description_data[0].value, .publishedDate] | @csv'
+                                } >./CVEs_Find_LOG/${filename}
                             else
-                                echo "File is empty"
+                                echo "Problem with streamfile"
+                            fi
+                            cd CVEs_Find_LOG
+                        }
+
+                        vulnerable() {
+
+                            if [ -f "./${filename}" ]; then
+                                if [ -s "./${filename}" ]; then
+                                    git config user.name ${env.GIT_COMMITER_NAME}
+                                    git config user.email ${env.GIT_COMMITER_EMAIL}
+                                    git checkout -b ${branchName}
+                                    git add ${filename}
+                                    git commit -m "New vulnerabilities list ${filename}"
+                                    git push --set-upstream origin ${branchName}
+                                    gh pr create --fill ${repo_url} -B main
+                                else
+                                    echo "File is empty"
+                                    return 0
+                                fi
+                            else
+                                echo "File not exists"
                                 return 0
                             fi
-                        else
-                            echo "File not exists"
-                            return 0
-                        fi
-                    }
+                        }
 
-                    
-                    main() {
-                        delete
-                        download
-                        checkVulnerability
-                        vulnerable
-                    }
-                    main
+                        
+                        main() {
+                            #delete
+                            download
+                            checkVulnerability
+                            vulnerable
+                            logCVE
 
-                    """
+                            ${index}=${index}+1
+
+                            
+                        }
+                        main
+
+                        """
+                    }
                 }
 
                 
