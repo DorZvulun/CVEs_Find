@@ -24,7 +24,7 @@ pipeline{
                     sh """
                     git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
                     cd CVEs_Find_LOG
-                    
+                    gh pr list
                     
                     """
                 }
