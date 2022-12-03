@@ -90,7 +90,7 @@ pipeline{
 
                     
                     main() {
-                        #delete
+                        delete
                         download
                         checkVulnerability
                         vulnerable
