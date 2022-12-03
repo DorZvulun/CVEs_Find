@@ -74,7 +74,6 @@ pipeline{
                                 git config user.name ${env.GIT_COMMITER_NAME}
                                 git config user.email ${env.GIT_COMMITER_EMAIL}
                                 git checkout -b ${branchName}
-                                cat ${filename}
                                 git add ${filename}
                                 git commit -m "New vulnerabilities list ${filename}"
                                 git push --set-upstream origin ${branchName}
