@@ -1,7 +1,8 @@
 def timestamp=new Date().format("dd_mm_yyy")
-def branchName="cve_${timestamp}"
-def filename="CVE-${timestamp}.csv"
+def branchName="cve_${timestamp}_${index}"
+def filename="CVE-${timestamp}_${index}.csv"
 def repo_url="https://github.com/DorZvulun/CVEs_Find_LOG.git"
+def index=1
 
 pipeline{
     agent any
@@ -95,6 +96,8 @@ pipeline{
                         checkVulnerability
                         vulnerable
                         logCVE
+
+                        ${index}=${index}+1
 
                         
                     }
