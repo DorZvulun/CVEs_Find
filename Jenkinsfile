@@ -1,7 +1,7 @@
 def branchName=""
 def filename=""
 def repo_url="https://github.com/DorZvulun/CVEs_Find_LOG.git"
-def GITHUB_TOKEN="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"
+def GH_TOKEN="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"
 pipeline{
     agent any
     options{
