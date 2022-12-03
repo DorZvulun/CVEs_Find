@@ -20,9 +20,7 @@ pipeline{
         stage('PR_fence'){
             steps{
                 script{
-                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-                    echo "~~~~~ Checking if PR exists ~~~~~"
-                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~ Checking if PR exists ~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                     sh """
                         git clone git@github.com:dorzvulun/CVEs_Find_Log.git
                         cd CVEs_Find_Log
