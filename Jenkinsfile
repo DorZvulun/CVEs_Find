@@ -21,10 +21,14 @@ pipeline{
             steps{
                 script{
                     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~ Checking if PR exists ~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+                    sh """
+                        git clone git@github.com:dorzvulun/cves_find_log.git
+                        cd cves_find_log
+                        echo $PWD
+                    """
+                    
                     withCredentials([sshUserPrivateKey(credentialsId: 'ceb8ef64-63bc-4918-8c7f-a34193776425')]) {
                         sh """
-                            git clone git@github.com:dorzvulun/CVEs_Find_Log.git
-                            cd CVEs_Find_Log
                             gh pr list
                         """
                         // sh """
