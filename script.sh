@@ -59,3 +59,7 @@ main() {
     fi
 }
 main
+
+if [[ "${string}" == *"${substring}"* ]]; then
+    echo "${string} contains: ${substring}"
+fi
