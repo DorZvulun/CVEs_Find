@@ -55,15 +55,16 @@ pipeline{
 
                     checkVulnerability() {
                         git clone ${repo_url}
-                        cd CVEs_Find_LOG
+                        
                         if [ -f "./nvdcve-1.1-modified.json" ]; then
                             {
                                 echo -e 'ID, Description, Publish Date\n'
                                 cat nvdcve-1.1-modified.json | jq -c -r '.CVE_Items[] | select(.cve.description.description_data[0].value | test(".*(Jenkins|Kubernetes).*")) | [.cve.CVE_data_meta.ID, .cve.description.description_data[0].value, .publishedDate] | @csv'
-                            } >${filename}
+                            } >./CVEs_Find_LOG/${filename}
                         else
                             echo "Problem with streamfile"
                         fi
+                        cd CVEs_Find_LOG
                     }
 
                     vulnerable() {
