@@ -26,7 +26,7 @@ pipeline{
                             git clone git@github.com:dorzvulun/cves_find_log.git
                             cd cves_find_log
                             echo $PWD
-                            gh pr list
+                            #gh pr list
                         """
                     }
                     
