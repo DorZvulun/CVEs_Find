@@ -21,20 +21,22 @@ pipeline{
             steps{
                 script{
                     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n~~~~~ Checking if PR exists ~~~~~\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-                    sh """
-                        git clone git@github.com:dorzvulun/CVEs_Find_Log.git
-                        cd CVEs_Find_Log
-                        gh pr list
-                    """
-                    // sh """
-                    //     git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
-                    //     cd CVEs_Find_LOG
-                    //     if ! [[ $(gh pr list) == *"no open pull requests"* ]]
-                    //         then
-                    //             echo "~~~~~~ no pull requests ~~~~~~"
-                    //             exit 0
-                    //     fi 
-                    // """
+                    withCredentials([sshUserPrivateKey(credentialsId: 'afe69f57-cb5a-461a-afe3-46e83465d987')]) {
+                        sh """
+                            git clone git@github.com:dorzvulun/CVEs_Find_Log.git
+                            cd CVEs_Find_Log
+                            gh pr list
+                        """
+                        // sh """
+                        //     git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
+                        //     cd CVEs_Find_LOG
+                        //     if ! [[ $(gh pr list) == *"no open pull requests"* ]]
+                        //         then
+                        //             echo "~~~~~~ no pull requests ~~~~~~"
+                        //             exit 0
+                        //     fi 
+                        // """
+                    }
                     
                 }
                 
