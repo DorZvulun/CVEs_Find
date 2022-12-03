@@ -26,7 +26,7 @@ pipeline{
                     cd CVEs_Find_LOG
                     if [[ $(gh pr list) == *"no open pull requests"* ]]
                     then
-                        exit 0
+                        echo "no open pull requests"
                     fi
                     
                     """
