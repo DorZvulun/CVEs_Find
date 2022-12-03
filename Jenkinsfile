@@ -21,16 +21,15 @@ pipeline{
             steps{
                 script{
                     echo "~~~~~ Checking if PR exists ~~~~~"
-                    sh """
-                        git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
-                        cd CVEs_Find_LOG
-                        if ! [[ $(gh pr list) == *"no open pull requests"* ]]
-                            then
-                                echo "~~~~~~ no pull requests ~~~~~~"
-                                exit 0
-                        fi 
-
-                    """
+                    // sh """
+                    //     git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
+                    //     cd CVEs_Find_LOG
+                    //     if ! [[ $(gh pr list) == *"no open pull requests"* ]]
+                    //         then
+                    //             echo "~~~~~~ no pull requests ~~~~~~"
+                    //             exit 0
+                    //     fi 
+                    // """
                     
                 }
                 
