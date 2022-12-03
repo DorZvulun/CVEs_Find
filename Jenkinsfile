@@ -9,9 +9,9 @@ pipeline{
         timestamps()
         timeout(time:14, unit: 'MINUTES')
         buildDiscarder(logRotator(
-            numToKeepStr: '0',
-            daysToKeepStr: '0',
-            artifactNumToKeepStr: '0'
+            numToKeepStr: '1',
+            daysToKeepStr: '1',
+            artifactNumToKeepStr: '1'
         ))
     }
 
