@@ -24,7 +24,9 @@ pipeline{
                     echo "~~~~~ Checking if PR exists ~~~~~"
                     echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
                     sh """
-                        echo "HELLO WORLD"
+                        git clone git@github.com:dorzvulun/CVEs_Find_Log.git
+                        cd CVEs_Find_LOG
+                        echo $PWD
                     """
                     // sh """
                     //     git clone git@github.com:DorZvulun/CVEs_Find_LOG.git
