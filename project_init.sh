@@ -2,11 +2,11 @@
 
 # read admin user
 echo -e "Enter Admin User for Jenkins (default: admin) "
-#read username
+read username
 
 # read admin password
 echo -e "Enter Admin Password for Jenkins (default: admin) "
-#read password
+read password
 
 if [[ -z "${username}" ]]; then
     username=admin
